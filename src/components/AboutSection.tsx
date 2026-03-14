@@ -96,9 +96,11 @@ const AboutSection = () => {
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 * i, duration: 0.6 }}
-                  className="p-6 rounded-3xl bg-card shadow-ceramic-md border border-border text-center"
+                  className="p-6 rounded-3xl bg-card shadow-ceramic-md border border-border text-center cursor-default"
                 >
                   <stat.icon className="h-6 w-6 text-primary mx-auto mb-3" />
                   <p className="text-3xl font-display font-800 text-primary">{stat.value}</p>

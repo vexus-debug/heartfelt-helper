@@ -76,7 +76,9 @@ const ReviewsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06, duration: 0.5 }}
-              className="p-6 rounded-3xl bg-card border border-border shadow-ceramic-sm hover:shadow-ceramic-md transition-shadow duration-300"
+              whileHover={{ y: -6, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="p-6 rounded-3xl bg-card border border-border shadow-ceramic-sm hover:shadow-ceramic-md transition-shadow duration-300 cursor-default"
             >
               <div className="flex items-center gap-1 mb-3">
                 {[...Array(review.rating)].map((_, j) => (
