@@ -105,28 +105,51 @@ const HeroSection = () => {
           transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="relative"
         >
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-3xl overflow-hidden shadow-ceramic-lg aspect-[3/4]">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="rounded-3xl overflow-hidden shadow-ceramic-lg aspect-[3/4]"
+            >
               <img
                 src={clinicChair}
                 alt="Modern dental chair and equipment at Zoe Care Dental Clinic"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="rounded-3xl overflow-hidden shadow-ceramic-lg flex-1">
+            </motion.div>
+            <div className="flex flex-col gap-3 md:gap-4">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="rounded-3xl overflow-hidden shadow-ceramic-lg flex-1 min-h-0"
+              >
                 <img
                   src={bracesImg}
                   alt="Orthodontic braces treatment at Zoe Care"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
-              </div>
-              <div className="rounded-3xl bg-primary p-5 flex flex-col justify-center shadow-ceramic-lg">
-                <p className="text-primary-foreground font-display font-700 text-lg">Open 7 Days</p>
-                <p className="text-primary-foreground/70 text-sm mt-1">
-                  Including Sundays
-                </p>
-              </div>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="rounded-3xl bg-primary p-4 sm:p-5 md:p-6 flex items-center gap-3 shadow-ceramic-lg cursor-default"
+              >
+                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-primary-foreground/15 flex items-center justify-center shrink-0">
+                  <svg className="h-5 w-5 text-primary-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-primary-foreground font-display font-700 text-base sm:text-lg leading-tight">Open 7 Days</p>
+                  <p className="text-primary-foreground/60 text-xs sm:text-sm mt-0.5">
+                    Mon–Sat 8:30AM · Sun 2PM
+                  </p>
+                </div>
+              </motion.div>
             </div>
           </div>
         </motion.div>

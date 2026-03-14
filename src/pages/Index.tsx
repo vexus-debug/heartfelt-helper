@@ -5,6 +5,7 @@ import ServicesSection from "@/components/ServicesSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
       <ReviewsSection />
       <ContactSection />
       <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 };
