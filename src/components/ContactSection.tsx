@@ -125,7 +125,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <p className="font-medium text-foreground text-sm">Email</p>
-                  <p className="text-muted-foreground text-sm">info@zoecaredental.com</p>
+                  <a href="mailto:zoecaredentalasaba@gmail.com" className="text-muted-foreground text-sm hover:text-primary transition-colors">zoecaredentalasaba@gmail.com</a>
                 </div>
               </div>
             </div>
