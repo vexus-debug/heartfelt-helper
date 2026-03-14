@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import bracesImg from "@/assets/braces-closeup.webp";
 
 const allServices = [
   // Core specialties
-  { id: "orthodontics", name: "Orthodontics (Braces & Aligners)", category: "Specialty" },
-  { id: "maxillofacial", name: "Maxillofacial Surgery", category: "Specialty" },
-  { id: "periodontics", name: "Periodontics (Gum Treatment)", category: "Specialty" },
-  { id: "conservative", name: "Conservative Dentistry", category: "Specialty" },
+  { id: "orthodontics", name: "Orthodontics (Braces & Aligners)", category: "Specialty", description: "Straighten your teeth with modern braces and clear aligners" },
+  { id: "maxillofacial", name: "Maxillofacial Surgery", category: "Specialty", description: "Surgical solutions for jaw, face, and mouth conditions" },
+  { id: "periodontics", name: "Periodontics (Gum Treatment)", category: "Specialty", description: "Expert treatment for gum disease and oral tissue health" },
+  { id: "conservative", name: "Conservative Dentistry", category: "Specialty", description: "Preserving natural teeth with minimal intervention" },
   // General services
   { id: "cleaning", name: "Teeth Cleaning & Polishing", category: "General" },
   { id: "whitening", name: "Teeth Whitening", category: "General" },
@@ -53,66 +54,129 @@ const ServicesSection = () => {
   return (
     <section id="services" className="py-24 md:py-32 bg-surface-dark text-surface-dark-foreground">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-12 space-y-4"
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-sm font-medium">
-            Our Services
-          </span>
-          <h2 className="text-4xl md:text-5xl font-display font-700 leading-tight">
-            Select your services
-            <br />
-            <span className="text-white/50">& book instantly.</span>
-          </h2>
-          <p className="text-white/50 text-lg max-w-xl mx-auto">
-            Choose one or more services below, then book your appointment directly via WhatsApp.
-          </p>
-        </motion.div>
-
-        {categories.map((cat) => (
-          <div key={cat} className="mb-8">
-            <p className="text-xs font-medium uppercase tracking-widest text-white/30 mb-4 px-1">
-              {cat}
+        <div className="grid md:grid-cols-[1fr_auto] gap-12 mb-12 items-end">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="space-y-4"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-sm font-medium">
+              Our Services
+            </span>
+            <h2 className="text-4xl md:text-5xl font-display font-700 leading-tight">
+              Select your services
+              <br />
+              <span className="text-white/50">& book instantly.</span>
+            </h2>
+            <p className="text-white/50 text-lg max-w-xl">
+              Choose one or more services below, then book your appointment directly via WhatsApp.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {allServices
-                .filter((s) => s.category === cat)
-                .map((service, i) => {
-                  const isSelected = selected.includes(service.id);
-                  return (
-                    <motion.button
-                      key={service.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.03, duration: 0.4 }}
-                      onClick={() => toggle(service.id)}
-                      className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-left transition-all duration-200 press-scale ${
-                        isSelected
-                          ? "bg-primary/20 border-primary/50 text-white"
-                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+          </motion.div>
+
+          {/* Featured image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.7 }}
+            className="hidden md:block"
+          >
+            <div className="w-48 h-48 rounded-3xl overflow-hidden border-2 border-white/10 shadow-ceramic-lg">
+              <img
+                src={bracesImg}
+                alt="Orthodontic braces at Zoe Care"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Specialty cards with descriptions */}
+        <div className="mb-10">
+          <p className="text-xs font-medium uppercase tracking-widest text-white/30 mb-4 px-1">
+            Specialty
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {allServices
+              .filter((s) => s.category === "Specialty")
+              .map((service, i) => {
+                const isSelected = selected.includes(service.id);
+                return (
+                  <motion.button
+                    key={service.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05, duration: 0.4 }}
+                    onClick={() => toggle(service.id)}
+                    className={`flex items-start gap-3 px-5 py-5 rounded-2xl border text-left transition-all duration-200 press-scale ${
+                      isSelected
+                        ? "bg-primary/20 border-primary/50 text-white"
+                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <div
+                      className={`h-5 w-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-colors duration-200 ${
+                        isSelected ? "bg-primary border-primary" : "border-white/20"
                       }`}
                     >
-                      <div
-                        className={`h-5 w-5 rounded-md border flex items-center justify-center shrink-0 transition-colors duration-200 ${
+                      {isSelected && <Check className="h-3 w-3" />}
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium block">{service.name}</span>
+                      {"description" in service && (
+                        <span className="text-xs text-white/40 mt-1 block">{service.description}</span>
+                      )}
+                    </div>
+                  </motion.button>
+                );
+              })}
+          </div>
+        </div>
+
+        {/* Other categories */}
+        {categories
+          .filter((c) => c !== "Specialty")
+          .map((cat) => (
+            <div key={cat} className="mb-8">
+              <p className="text-xs font-medium uppercase tracking-widest text-white/30 mb-4 px-1">
+                {cat}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {allServices
+                  .filter((s) => s.category === cat)
+                  .map((service, i) => {
+                    const isSelected = selected.includes(service.id);
+                    return (
+                      <motion.button
+                        key={service.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.03, duration: 0.4 }}
+                        onClick={() => toggle(service.id)}
+                        className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-left transition-all duration-200 press-scale ${
                           isSelected
-                            ? "bg-primary border-primary"
-                            : "border-white/20"
+                            ? "bg-primary/20 border-primary/50 text-white"
+                            : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
                         }`}
                       >
-                        {isSelected && <Check className="h-3 w-3" />}
-                      </div>
-                      <span className="text-sm font-medium">{service.name}</span>
-                    </motion.button>
-                  );
-                })}
+                        <div
+                          className={`h-5 w-5 rounded-md border flex items-center justify-center shrink-0 transition-colors duration-200 ${
+                            isSelected ? "bg-primary border-primary" : "border-white/20"
+                          }`}
+                        >
+                          {isSelected && <Check className="h-3 w-3" />}
+                        </div>
+                        <span className="text-sm font-medium">{service.name}</span>
+                      </motion.button>
+                    );
+                  })}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
         {/* Floating book button */}
         <motion.div

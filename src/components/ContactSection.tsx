@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Navigation } from "lucide-react";
+import clinicSignage from "@/assets/clinic-signage.webp";
 
 const hours = [
   { day: "Monday", time: "8:30 AM – 7:30 PM" },
@@ -30,27 +31,39 @@ const ContactSection = () => {
           <h2 className="text-4xl md:text-5xl font-display font-700 text-foreground leading-tight">
             Visit us today.
           </h2>
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            We're conveniently located on Old Anwai Road in Asaba, open 7 days a week for your dental needs.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {/* Map */}
+          {/* Map + clinic photo */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="rounded-3xl overflow-hidden border border-border shadow-ceramic-md md:row-span-1"
+            className="space-y-4 md:row-span-1"
           >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.0!2d6.73!3d6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1043f3!2sZoe+Care+Dental+Clinic!5e0!3m2!1sen!2sng!4v1"
-              width="100%"
-              height="100%"
-              style={{ border: 0, minHeight: "300px", filter: "grayscale(1) contrast(1.1)" }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Zoe Care Dental Clinic Location"
-            />
+            <div className="rounded-3xl overflow-hidden border border-border shadow-ceramic-md">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.0!2d6.73!3d6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1043f3!2sZoe+Care+Dental+Clinic!5e0!3m2!1sen!2sng!4v1"
+                width="100%"
+                height="220"
+                style={{ border: 0, filter: "grayscale(1) contrast(1.1)" }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Zoe Care Dental Clinic Location"
+              />
+            </div>
+            <div className="rounded-3xl overflow-hidden border border-border shadow-ceramic-md aspect-[16/10]">
+              <img
+                src={clinicSignage}
+                alt="Zoe Care Dental Clinic front signage"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </motion.div>
 
           {/* Hours */}
@@ -129,6 +142,17 @@ const ContactSection = () => {
                 </div>
               </div>
             </div>
+
+            {/* Directions button */}
+            <a
+              href="https://www.google.com/maps/dir//Zoe+Care+Dental+Clinic,+67+Old+Anwai+Rd,+Isieke,+Asaba+320104,+Delta,+Nigeria"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full p-4 rounded-3xl border border-border bg-card text-foreground font-medium transition-all duration-300 hover:bg-muted press-scale"
+            >
+              <Navigation className="h-5 w-5" />
+              Get Directions
+            </a>
 
             <a
               href="https://wa.me/2347038899828?text=Hello%20Zoe%20Care,%20I%20would%20like%20to%20book%20an%20appointment."
