@@ -1,6 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import heroImage from "@/assets/hero-abstract.png";
+import { ArrowRight } from "lucide-react";
+import clinicChair from "@/assets/dental-chair.jpg";
+import bracesImg from "@/assets/braces-closeup.webp";
 
 const HeroSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -8,8 +10,8 @@ const HeroSection = () => {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.4]);
 
   return (
     <section
@@ -17,7 +19,25 @@ const HeroSection = () => {
       ref={ref}
       className="relative min-h-screen flex items-center bg-background overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 w-full grid md:grid-cols-2 gap-12 items-center pt-24 pb-16">
+      {/* Background image grid - visible on larger screens */}
+      <div className="absolute inset-0 hidden md:block">
+        <motion.div
+          style={{ y: imageY }}
+          className="absolute top-20 right-0 w-[55%] h-[85%]"
+        >
+          <img
+            src={clinicChair}
+            alt="Modern dental treatment room at Zoe Care"
+            className="w-full h-full object-cover rounded-l-[3rem] opacity-20"
+          />
+          <motion.div
+            style={{ opacity: overlayOpacity }}
+            className="absolute inset-0 bg-background rounded-l-[3rem]"
+          />
+        </motion.div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid md:grid-cols-2 gap-12 items-center pt-28 md:pt-24 pb-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -40,7 +60,7 @@ const HeroSection = () => {
             </h1>
           </div>
           <p className="text-lg text-muted-foreground max-w-md leading-relaxed">
-            Specialized maxillofacial and orthodontic excellence in the heart of Asaba. 
+            Specialized maxillofacial and orthodontic excellence in the heart of Asaba.
             Where advanced dental science meets compassionate care.
           </p>
           <div className="flex flex-wrap gap-4">
@@ -48,9 +68,10 @@ const HeroSection = () => {
               href="https://wa.me/2347038899828?text=Hello%20Zoe%20Care,%20I%20would%20like%20to%20book%20an%20appointment."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium transition-all duration-300 brand-curve press-scale hover:shadow-ceramic-lg animate-pulse-soft"
+              className="group flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium transition-all duration-300 brand-curve press-scale hover:shadow-ceramic-lg"
             >
               Book Appointment
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
               href="tel:+2347038899828"
@@ -77,18 +98,37 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
+        {/* Mobile image + bento grid for desktop */}
         <motion.div
-          style={{ scale: imageScale, y: imageY }}
-          className="relative flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative"
         >
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            src={heroImage}
-            alt="Abstract glass sculpture representing clarity and precision"
-            className="w-full max-w-lg mx-auto"
-          />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-3xl overflow-hidden shadow-ceramic-lg aspect-[3/4]">
+              <img
+                src={clinicChair}
+                alt="Modern dental chair and equipment at Zoe Care Dental Clinic"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="rounded-3xl overflow-hidden shadow-ceramic-lg flex-1">
+                <img
+                  src={bracesImg}
+                  alt="Orthodontic braces treatment at Zoe Care"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="rounded-3xl bg-primary p-5 flex flex-col justify-center shadow-ceramic-lg">
+                <p className="text-primary-foreground font-display font-700 text-lg">Open 7 Days</p>
+                <p className="text-primary-foreground/70 text-sm mt-1">
+                  Including Sundays
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
