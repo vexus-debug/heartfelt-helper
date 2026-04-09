@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { ArrowLeft, Pencil, KeyRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +19,12 @@ export default function MyProfilePage() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [saving, setSaving] = useState(false);
+
+  // Password change
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [savingPassword, setSavingPassword] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -47,8 +53,35 @@ export default function MyProfilePage() {
     } else {
       toast({ title: "Profile updated" });
       setEditing(false);
-      // Refresh page to get updated profile
       window.location.reload();
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (!user) return;
+    if (newPassword.length < 6) {
+      toast({ title: "Error", description: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ title: "Error", description: "Passwords do not match", variant: "destructive" });
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("manage-staff-account", {
+        body: { action: "update-password", targetUserId: user.id, newPassword },
+      });
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || "Failed to update password");
+      toast({ title: "Password updated successfully" });
+      setChangingPassword(false);
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } finally {
+      setSavingPassword(false);
     }
   };
 
@@ -122,13 +155,45 @@ export default function MyProfilePage() {
                   <span>{roles.map(getRoleLabel).join(", ") || "None assigned"}</span>
                 </div>
               </div>
-              <Button variant="outline" onClick={() => setEditing(true)}>
-                <Pencil className="mr-2 h-4 w-4" /> Edit Profile
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setEditing(true)}>
+                  <Pencil className="mr-2 h-4 w-4" /> Edit Profile
+                </Button>
+                <Button variant="outline" onClick={() => setChangingPassword(true)}>
+                  <KeyRound className="mr-2 h-4 w-4" /> Change Password
+                </Button>
+              </div>
             </>
           )}
         </CardContent>
       </Card>
+
+      {/* Password Change Card */}
+      {changingPassword && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <KeyRound className="h-4 w-4" /> Change Password
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>New Password</Label>
+              <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Min 6 characters" />
+            </div>
+            <div className="space-y-2">
+              <Label>Confirm Password</Label>
+              <Input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter password" />
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => { setChangingPassword(false); setNewPassword(""); setConfirmPassword(""); }}>Cancel</Button>
+              <Button onClick={handlePasswordChange} disabled={savingPassword}>
+                {savingPassword ? "Updating..." : "Update Password"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
