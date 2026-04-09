@@ -285,8 +285,9 @@ export default function LdSalaryAllocationPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(allocation.rows || []).map((row: any) => (
-                  <TableRow key={row.staffId}>
+                {(allocation.rows || [])
+                  .filter((row: any) => isAdmin || staff.some((s: any) => s.id === row.staffId && s.user_id === user?.id))
+                  .map((row: any) => (
                     <TableCell>
                       <div>
                         <p className="font-medium text-sm">{row.name}</p>
