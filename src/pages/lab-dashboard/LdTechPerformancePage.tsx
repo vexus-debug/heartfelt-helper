@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { useLdCases, useLdStaff } from "@/hooks/useLabDashboard";
+import { useAuth } from "@/hooks/useAuth";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Users, CheckCircle, AlertTriangle, Clock, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
@@ -210,11 +211,20 @@ function PerformanceCards({ data }: { data: ReturnType<typeof computePerformance
 export default function LdTechPerformancePage() {
   const { data: cases = [] } = useLdCases();
   const { data: staff = [] } = useLdStaff();
+  const { roles, user } = useAuth();
+  const isAdmin = roles.includes("admin");
 
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), "yyyy-MM"));
   const [fiscalYear, setFiscalYear] = useState(new Date().getFullYear().toString());
 
-  const technicians = staff.filter((s: any) => s.status === "active");
+  // For non-admin, filter to only show their own performance
+  const technicians = useMemo(() => {
+    const active = staff.filter((s: any) => s.status === "active");
+    if (isAdmin) return active;
+    // Find ld_staff linked to current user
+    const myStaff = active.filter((s: any) => s.user_id === user?.id);
+    return myStaff.length > 0 ? myStaff : active; // fallback to all if not linked yet
+  }, [staff, isAdmin, user?.id]);
 
   const monthStart = startOfMonth(new Date(selectedMonth + "-01"));
   const monthEnd = endOfMonth(monthStart);
@@ -226,7 +236,10 @@ export default function LdTechPerformancePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Technician Performance" description="Output rates, completion types, and salary-relevant metrics" />
+      <PageHeader
+        title={isAdmin ? "Technician Performance" : "My Performance"}
+        description={isAdmin ? "Output rates, completion types, and salary-relevant metrics" : "Your output rates and performance metrics"}
+      />
 
       <Tabs defaultValue="monthly" className="space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-3">

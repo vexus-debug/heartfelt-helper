@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 const fmt = (n: number) => new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
 export default function LdSalaryAllocationPage() {
-  const { roles } = useAuth();
+  const { roles, user } = useAuth();
   const isAdmin = roles.includes("admin");
   const { data: cases = [] } = useLdCases();
   const { data: staff = [] } = useLdStaff();
@@ -285,7 +285,9 @@ export default function LdSalaryAllocationPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(allocation.rows || []).map((row: any) => (
+                {(allocation.rows || [])
+                  .filter((row: any) => isAdmin || staff.some((s: any) => s.id === row.staffId && s.user_id === user?.id))
+                  .map((row: any) => (
                   <TableRow key={row.staffId}>
                     <TableCell>
                       <div>
