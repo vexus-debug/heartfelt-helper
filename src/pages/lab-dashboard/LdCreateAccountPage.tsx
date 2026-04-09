@@ -53,13 +53,22 @@ export default function LdCreateAccountPage() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("create-lab-account", {
+      // Find matching clinic staff ID by email
+      const { data: clinicStaff } = await supabase
+        .from("staff")
+        .select("id")
+        .eq("email", email)
+        .maybeSingle();
+
+      const { data, error } = await supabase.functions.invoke("manage-staff-account", {
         body: {
+          action: "create",
           email,
           password,
           fullName,
           role,
           ldStaffId: ldStaffId && ldStaffId !== "none" ? ldStaffId : undefined,
+          clinicStaffId: clinicStaff?.id || undefined,
         },
       });
 
